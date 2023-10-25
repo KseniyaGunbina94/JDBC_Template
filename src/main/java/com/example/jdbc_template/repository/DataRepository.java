@@ -3,11 +3,11 @@ package com.example.jdbc_template.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,18 +16,19 @@ public class DataRepository {
     private String sql;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
 
     public DataRepository() {
         sql = DataRepository.read("select.sql");
-        System.out.println(sql);
         jdbcTemplate = new JdbcTemplate();
+        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 
     public List<String> getProductName(String nameSql){
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            String productName = rs.getString("product_name");
-            return productName;
-        }, nameSql);
+        SqlParameterSource namedParameters = new MapSqlParameterSource("name", nameSql);
+        return namedParameterJdbcTemplate.queryForList(sql, namedParameters, String.class);
     }
 
     private static String read(String scriptFileName) {
