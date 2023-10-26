@@ -6,24 +6,23 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Repository
 public class DataRepository {
 
     private String sql;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
+    //private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 
-    public DataRepository() {
+    public DataRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         sql = DataRepository.read("select.sql");
-        jdbcTemplate = new JdbcTemplate();
-        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+        //jdbcTemplate = new JdbcTemplate();
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     public List<String> getProductName(String nameSql){
