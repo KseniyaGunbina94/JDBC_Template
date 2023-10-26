@@ -1,8 +1,6 @@
 package com.example.jdbc_template.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -15,13 +13,11 @@ import java.util.stream.Collectors;
 public class DataRepository {
 
     private String sql;
-    //private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 
     public DataRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         sql = DataRepository.read("select.sql");
-        //jdbcTemplate = new JdbcTemplate();
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
